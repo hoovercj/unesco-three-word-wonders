@@ -1,0 +1,50 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/lib/semantic/css/semantic.min.css"/>
+    <link rel="stylesheet" href="/css/base.css"/>
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400,700"/>
+</head>
+<body>
+	<div class="ui inverted red segment">
+		<div class="banner ui center aligned icon header">
+			<i class="world icon"></i>
+			<h1>Three Word Wonders</h1>
+			<h4>Describing the worlds beauty, three words at a time</h4>
+		</div>
+	</div>
+	<div class="main container">
+	    <div class="ui grid">
+	        <div class="column">
+	            <div class="ui center aligned header">
+	            	<h1 class="ui red header"data-bind="text: activeSite() && activeSite().name"></h1>
+	            	<h3 data-bind="text: activeSite() && activeSite().state"></h3>
+	            </div>
+				<h2 class="ui center aligned header"><a data-bind="attr: { href: activeSite() && activeSite().threeWordsURL}, text: activeSite() && activeSite().threeWords"></a></h2>
+	            <h3>Description:</h3>
+	            <p data-bind="html: activeSite() && activeSite().description"></p>
+                <div class="ui doubling four column vertically padded grid" data-bind="visible: photos().length > 0, foreach: photos">
+                    <div class="column">
+                        <div class="ui centered image">
+                            <img src="/img/placeholder.png" data-bind="attr: { 'src': $data }">
+                        </div>
+                    </div>
+                </div> 
+	        	<div class="fluid ui red button" id="searchButton" data-bind="click: activateRandomSite">Random UNESCO Site</div>
+	        	<br/><br/><p>World Heritage Site information gathered from <a href="http://whc.unesco.org/en/list/">UNESCO</a>, 3 word descriptions from <a href="http://www.what3words.com">what3words</a>, and images sourced from <a href="http://www.flickr.com">flickr</a>. Created by Cody Hoover and hosted by <a href="https://github.com/hoovercj/unesco-three-word-wonders">github</a></p>
+	        </div><!-- Column -->
+	    </div><!-- UI Grid -->
+	</div><!-- Main Container -->
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="/lib/semantic/javascript/semantic.min.js"></script>
+	<script src="/js/knockout-3.2.0.js"></script>
+	<script src="/js/w3w.js"></script>
+    <!-- PerfectPass JS -->
+    <script src="/js/app.js"></script>
+    <script src="/js/viewmodel.js"></script>   
+</body>
+</html>
