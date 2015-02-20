@@ -18,7 +18,7 @@ var ViewModel = function() {
     self.unescoSites = ko.observableArray([]);
     self.activeSite = ko.observable();
 
-    $.getJSON('/js/unesco.json', function (data) {
+    $.getJSON('js/unesco.json', function (data) {
         self.unescoSites(data.map( function (site) {
             return new UnescoSite(site);
         }));
