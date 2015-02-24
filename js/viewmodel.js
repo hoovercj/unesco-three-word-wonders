@@ -22,19 +22,24 @@ var ViewModel = function() {
         self.unescoSites(data.map( function (site) {
             return new UnescoSite(site);
         }));
-        
-        self.activateRandomSite();
+        Sammy(initSammy).run();
     });
 
-    function getUrlFromPhoto (photo) {
-        return 'https://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '_n.jpg';
-    }
+    // Client-side routes
+    var initSammy = function() {
+        this.get('#:index', function() {
+            if (this.params.index) {   
+                console.log('init with index: ' + this.params.index);         
+                self.activateSite(this.params.index);
+            } else {
+                console.log('init with no index');
+                self.activateRandomSite();
+            }
+        });
+    }   
 
-    self.activateRandomSite = function () {
-        var randomIndex = Math.floor((Math.random() * self.unescoSites().length) + 1);
-        console.log('Activate Random Site: ' + randomIndex);
-        //console.dir(self.unescoSites()[randomIndex]);
-        self.activeSite(self.unescoSites()[randomIndex]);
+    self.activateSite = function (index) {
+        self.activeSite(self.unescoSites()[index]);
         self.queryFlickr();
         if (!self.activeSite().threeWords() || self.activeSite().threeWords().length === 0) {
             var position = [self.activeSite().latitude, self.activeSite().longitude];
@@ -42,7 +47,15 @@ var ViewModel = function() {
                 console.log(ret);
                 self.activeSite().threeWords(ret);
             });
-        }
+        }       
+    }
+
+    function getUrlFromPhoto (photo) {
+        return 'https://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '_n.jpg';
+    }
+
+    self.activateRandomSite = function () {
+        location.hash = Math.floor((Math.random() * self.unescoSites().length) + 1);
     }
 
     self.queryFlickr = function () {
@@ -50,11 +63,8 @@ var ViewModel = function() {
         var params = { 
             'api_key':'0fb57b23161e29d12733e2d491969b93',
             'text': self.activeSite().name,
-            // 'is_commons': true,
             'sort': 'interestingness-desc',
             'license':'1,2,3,4,5,6,6,7,8',
-            // 'safe_search':'1',
-            // 'content_type':'1',
             'per_page':'8',
             'method':'flickr.photos.search',
             'format':'json',
