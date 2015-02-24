@@ -19,6 +19,7 @@ var ViewModel = function() {
     self.activeSite = ko.observable();
 
     $.getJSON('js/unesco.json', function (data) {
+        console.log('Got unesco.json');
         self.unescoSites(data.map( function (site) {
             return new UnescoSite(site);
         }));
@@ -28,13 +29,13 @@ var ViewModel = function() {
     // Client-side routes
     var initSammy = function() {
         this.get('#:index', function() {
-            if (this.params.index) {   
-                console.log('init with index: ' + this.params.index);         
-                self.activateSite(this.params.index);
-            } else {
-                console.log('init with no index');
-                self.activateRandomSite();
-            }
+            console.log('init with index: ' + this.params.index);         
+            self.activateSite(this.params.index);
+        });
+
+        this.get('', function() {
+            console.log('init with no index');
+            self.activateRandomSite();
         });
     }   
 
