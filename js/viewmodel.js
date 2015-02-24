@@ -19,7 +19,6 @@ var ViewModel = function() {
     self.activeSite = ko.observable();
 
     $.getJSON('js/unesco.json', function (data) {
-        console.log('Got unesco.json');
         self.unescoSites(data.map( function (site) {
             return new UnescoSite(site);
         }));
@@ -29,12 +28,10 @@ var ViewModel = function() {
     // Client-side routes
     var initSammy = function() {
         this.get('#:index', function() {
-            console.log('init with index: ' + this.params.index);         
             self.activateSite(this.params.index);
         });
 
         this.get('', function() {
-            console.log('init with no index');
             self.activateRandomSite();
         });
     }   
@@ -44,9 +41,8 @@ var ViewModel = function() {
         self.queryFlickr();
         if (!self.activeSite().threeWords() || self.activeSite().threeWords().length === 0) {
             var position = [self.activeSite().latitude, self.activeSite().longitude];
-            What3words.positionToWords(position, function (ret) {
-                console.log(ret);
-                self.activeSite().threeWords(ret);
+            What3words.positionToWords(position, function (ret) {                
+                self.activeSite().threeWords(ret[0] + '.' + ret[1] + '.' + ret[2]);
             });
         }       
     }
@@ -75,7 +71,7 @@ var ViewModel = function() {
             if(data.stat === 'ok') {
                 self.photos(data.photos.photo.map(getUrlFromPhoto));
             } else {
-                console.log('error');
+                console.log('error getting flickr photos');
             }            
         });
     }
