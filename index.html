@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="lib/semantic/css/semantic.min.css"/>
     <link rel="stylesheet" href="css/base.css"/>
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400,700"/>
+    <link rel="stylesheet" href="css/lightbox.css"/>
 </head>
 <body>
     <div class="ui inverted red basic segment">
@@ -26,8 +27,8 @@
         </div>
         <div class="ui doubling four column vertically padded grid" data-bind="visible: photos().length > 0, foreach: photos">
             <div class="column">
-                <a target="_blank" data-bind="attr: { href: pageUrl }">
-                    <img class="ui centered bordered image" src="/img/placeholder.png" data-bind="attr: { 'src': srcUrl, 'title': imageTip }">
+                <a target="_blank" data-lightbox="gallery" data-bind="attr: { 'href': largeUrl, 'data-title': imageTip }">
+                    <img class="ui centered bordered image" src="/img/placeholder.png" data-bind="attr: { 'src': thumbUrl, 'title': imageTip }">
                 </a>
                 <div class="ui center aligned column attribution">
                     <a rel='license' data-bind="attr { 'href': licenseUrl }" target='_blank'>
@@ -54,6 +55,7 @@
     <script src="js/knockout-3.2.0.js"></script>
     <script src="js/w3w.js"></script>
     <script src="js/sammy.min.js"></script>
+    <script src="js/lightbox.min.js"></script>
     <!-- PerfectPass JS -->
     <script src="js/app.js"></script>
     <script src="js/viewmodel.js"></script> 

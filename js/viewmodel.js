@@ -70,7 +70,8 @@ function Photo(photo) {
     self.farm = photo.farm;
     self.server = photo.server;    
     self.secret = photo.secret;
-    self.srcUrl = 'https://farm' + self.farm + '.staticflickr.com/' + self.server + '/' + self.id + '_' + self.secret + '_n.jpg';
+    self.thumbUrl = 'https://farm' + self.farm + '.staticflickr.com/' + self.server + '/' + self.id + '_' + self.secret + '_n.jpg';
+    self.largeUrl = ko.observable();
     self.pageUrl = 'https://www.flickr.com/photos/' + self.ownerId + '/' + self.id
     self.licenseName = ko.observable();
     self.licenseUrl = ko.observable();
@@ -108,16 +109,17 @@ var ViewModel = function() {
         };
         $.get( flickrUrl, params, function (data) {
             if(data.stat === 'ok') {
-                console.dir(data);
                 self.photos(data.photos.photo.map( function (photo) {
                     var newPhoto = new Photo(photo);
                     self.queryFlickrPhotoInfo(newPhoto);
+                    self.queryFlickrPhotoSizes(newPhoto);
                     return newPhoto;
                 }));
             } else {
                 console.log('error getting flickr photos');
             }            
         });
+    };
 
     self.queryFlickrPhotoInfo = function (photo) {
         var flickrUrl = 'https://api.flickr.com/services/rest';
@@ -129,9 +131,6 @@ var ViewModel = function() {
             'nojsoncallback':'1'
         };
         $.get( flickrUrl, params, function (data) {
-            console.dir(data);
-            console.log(data.photo.owner['path_alias']);
-            console.log(data.photo.license);
             photo.ownerName(data.photo.owner['path_alias']);
             photo.licenseName(licenses[data.photo.license].name);
             photo.licenseUrl(licenses[data.photo.license].url);
@@ -139,7 +138,25 @@ var ViewModel = function() {
         });
     };
 
+    self.queryFlickrPhotoSizes = function (photo) {
+        var flickrUrl = 'https://api.flickr.com/services/rest';
+        var params = { 
+            'api_key':'0fb57b23161e29d12733e2d491969b93',
+            'photo_id': photo.id,
+            'method':'flickr.photos.getSizes',
+            'format':'json',
+            'nojsoncallback':'1'
+        };
+        $.get( flickrUrl, params, function (data) {
+            for(var i = data.sizes.size.length - 1; i >= 0; i--) {
+                if (data.sizes.size[i].label !== 'Original') {
+                    photo.largeUrl(data.sizes.size[i].source);
+                    return;
+                }
+            }
+        });        
     }
+
 
     // Client-side routes
     var initSammy = function() {
