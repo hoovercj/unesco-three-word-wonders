@@ -40,6 +40,10 @@ p {
     padding: 20;
 }
 
+.ui.button {
+	border-radius: 0px!important;
+}
+
 .ui.table tr.negative,
 .ui.table td.negative,
 .ui.table tr.positive,
