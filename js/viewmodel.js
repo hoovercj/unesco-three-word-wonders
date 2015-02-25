@@ -7,7 +7,10 @@ function UnescoSite(site) {
     self.state = site['states_name_en'];
     self.threeWords = ko.observable();
     self.threeWordsURL = ko.computed(function () {
-        return "http://w3w.co/" + self.threeWords();
+        return 'http://w3w.co/' + self.threeWords();
+    });
+    self.mapURL = ko.computed(function () {
+        return 'https://maps.googleapis.com/maps/api/staticmap?center=' + self.latitude + ',' + self.longitude + '&zoom=13&size=600x300&maptype=roadmap&markers=color:red%7C' + self.latitude + ',' + self.longitude;
     });
 }
 
