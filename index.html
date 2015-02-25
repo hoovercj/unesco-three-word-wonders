@@ -19,22 +19,22 @@
 	<div class="main container">
 	    <div class="ui grid">
 	        <div class="column">
+	        	<div class="fluid ui red button" id="searchButton" data-bind="click: activateRandomSite">Random UNESCO Site</div>
 	            <div class="ui center aligned header">
 	            	<h1 class="ui red header"data-bind="html: activeSite() && activeSite().name"></h1>
 	            	<h3 data-bind="text: activeSite() && activeSite().state"></h3>
+	            	<h2><a data-bind="attr: { href: activeSite() && activeSite().threeWordsURL}, html: activeSite() && activeSite().threeWords"></a></h2>
 	            </div>
-	            <div class="column">
-					<img class="ui centered image" src="/img/placeholder.png" data-bind="visible: activeSite(), attr: { 'src': activeSite() && activeSite().mapURL }">
-				</div>
-				<h2 class="ui center aligned header"><a data-bind="attr: { href: activeSite() && activeSite().threeWordsURL}, html: activeSite() && activeSite().threeWords"></a></h2>
-	            <h3>Description:</h3>
-	            <p data-bind="html: activeSite() && activeSite().description"></p>
                 <div class="ui doubling four column vertically padded grid" data-bind="visible: photos().length > 0, foreach: photos">
                     <div class="column">
                         <img class="ui centered image" src="/img/placeholder.png" data-bind="attr: { 'src': $data }">
                     </div>
-                </div> 
-	        	<div class="fluid ui red button" id="searchButton" data-bind="click: activateRandomSite">Random UNESCO Site</div>
+                </div> 	            	            
+	            <h3>Description:</h3>
+	            <p data-bind="html: activeSite() && activeSite().description"></p>
+	            <div class="column">
+					<img class="ui centered image" src="/img/placeholder.png" data-bind="visible: activeSite(), attr: { 'src': activeSite() && activeSite().mapURL }">
+				</div>
 	        	<br/><br/><p>World Heritage Site information gathered from <a href="http://whc.unesco.org/en/list/">UNESCO</a>, 3 word addresses powered by <a href="http://www.what3words.com">what3words</a>, and images sourced from <a href="http://www.flickr.com">flickr</a>. Created by Cody Hoover and hosted by <a href="https://github.com/hoovercj/unesco-three-word-wonders">github</a></p>
 	        </div><!-- Column -->
 	    </div><!-- UI Grid -->
