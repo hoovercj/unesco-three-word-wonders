@@ -131,7 +131,16 @@ var ViewModel = function() {
             'nojsoncallback':'1'
         };
         $.get( flickrUrl, params, function (data) {
-            photo.ownerName(data.photo.owner['path_alias']);
+            console.dir(data);
+            if (data.photo.owner['path_alias']) {
+                photo.ownerName(data.photo.owner['path_alias']);
+            } else if (data.photo.owner['username']) {
+                photo.ownerName(data.photo.owner['username']);
+            } else if (data.photo.owner['realname']) {
+                photo.ownerName(data.photo.owner['realname']);
+            } else {
+                photo.ownerName('unknown');
+            }
             photo.licenseName(licenses[data.photo.license].name);
             photo.licenseUrl(licenses[data.photo.license].url);
             photo.licenseImageUrl("http://i.creativecommons.org/l/" + licenses[data.photo.license].code + "/2.0/80x15.png");
