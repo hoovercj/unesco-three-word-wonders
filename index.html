@@ -13,7 +13,7 @@
         <div class="banner ui center aligned icon header">
             <i class="world icon"></i>
             <h1>Three Word Wonders</h1>
-            <h4>Describing the worlds beauty, three words at a time</h4>
+            <h4>Exploring the world, three words at a time</h4>
         </div>
     </div>
     <div class="main container">
@@ -22,8 +22,9 @@
                 <div class="fluid ui blue button" id="searchButton" data-bind="click: activateRandomSite">Random UNESCO Site</div>
                 <div class="ui center aligned header">
                     <h1 class="ui red header"data-bind="html: activeSite() && activeSite().name"></h1>
-                    <h3 data-bind="text: activeSite() && activeSite().state"></h3>
+                    <h3 class="ui header" data-bind="text: activeSite() && activeSite().state"></h3>
                     <h2><a data-bind="attr: { href: activeSite() && activeSite().threeWordsUrl}, html: activeSite() && activeSite().threeWords"></a></h2>
+                    <div class="ui sub header"><a href="http://what3words.com/about">powered by what3words</a></div>
                 </div>
                 <div class="ui doubling four column vertically padded grid" data-bind="visible: photos().length > 0, foreach: photos">
                     <div class="column">
