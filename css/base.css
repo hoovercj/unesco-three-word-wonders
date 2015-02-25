@@ -32,8 +32,12 @@ p {
     margin: 40px auto;
 }
 
-.footer {
+#footer {
+    margin-top: 20;
     text-align: center;
+    background-color: #d95c5c;
+    color: white;
+    padding: 20;
 }
 
 .ui.table tr.negative,
