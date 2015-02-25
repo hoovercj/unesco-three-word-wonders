@@ -1,3 +1,47 @@
+var licenses = [{
+        "id": "0",
+        "name": "All Rights Reserved"
+    },{
+        "id": "1",
+        "name": "Attribution-NonCommercial-ShareAlike License",
+        "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/",
+        "code": "by-nc-sa"
+    },{
+        "id": "2",
+        "name": "Attribution-NonCommercial License",
+        "url": "http://creativecommons.org/licenses/by-nc/2.0/",
+        "code": "by-nc"
+    },{
+        "id": "3",
+        "name": "Attribution-NonCommercial-NoDerivs License",
+        "url": "http://creativecommons.org/licenses/by-nc-nd/2.0/",
+        "code": "by-nc-nd"
+    },{
+        "id": "4",
+        "name": "Attribution License",
+        "url": "http://creativecommons.org/licenses/by/2.0/",
+        "code": "by"
+    },{
+        "id": "5",
+        "name": "Attribution-ShareAlike License",
+        "url": "http://creativecommons.org/licenses/by-sa/2.0/",
+        "code": "by-sa"
+    },{
+        "id": "6",
+        "name": "Attribution-NoDerivs License",
+        "url": "http://creativecommons.org/licenses/by-nd/2.0/",
+        "code": "by-nd"
+    },{
+        "id": "7",
+        "name": "No known copyright restrictions",
+        "url": "http://flickr.com/commons/usage/",
+    },{
+        "id": "8",
+        "name": "United States Government Work",
+        "url": "http://www.usa.gov/copyright.shtml",
+    }
+];
+
 function UnescoSite(site) {
 	var self = this;	
 	self.name = site['name_en'];
@@ -16,6 +60,26 @@ function UnescoSite(site) {
     });
 }
 
+function Photo(photo) {
+    var self = this;
+    self.title = photo.title;
+    self.id = photo.id;
+    self.ownerId = photo.owner;
+    self.ownerUrl = 'https://www.flickr.com/photos/' + self.ownerId;
+    self.ownerName = ko.observable();
+    self.farm = photo.farm;
+    self.server = photo.server;    
+    self.secret = photo.secret;
+    self.srcUrl = 'https://farm' + self.farm + '.staticflickr.com/' + self.server + '/' + self.id + '_' + self.secret + '_n.jpg';
+    self.pageUrl = 'https://www.flickr.com/photos/' + self.ownerId + '/' + self.id
+    self.licenseName = ko.observable();
+    self.licenseUrl = ko.observable();
+    self.licenseImageUrl = ko.observable();
+    self.imageTip = ko.computed(function () {
+        return self.title + ' by ' + self.ownerName() + ', on Flickr';
+    });
+}
+
 var ViewModel = function() {
 	var self = this;
     self.searchTerm = ko.observable();
@@ -29,6 +93,53 @@ var ViewModel = function() {
         }));
         Sammy(initSammy).run();
     });
+
+    self.queryFlickr = function () {
+        var flickrUrl = 'https://api.flickr.com/services/rest';
+        var params = { 
+            'api_key':'0fb57b23161e29d12733e2d491969b93',
+            'text': self.activeSite().name,
+            'sort': 'interestingness-desc',
+            'license':'1,2,3,4,5,6',
+            'per_page':'8',
+            'method':'flickr.photos.search',
+            'format':'json',
+            'nojsoncallback':'1'
+        };
+        $.get( flickrUrl, params, function (data) {
+            if(data.stat === 'ok') {
+                console.dir(data);
+                self.photos(data.photos.photo.map( function (photo) {
+                    var newPhoto = new Photo(photo);
+                    self.queryFlickrPhotoInfo(newPhoto);
+                    return newPhoto;
+                }));
+            } else {
+                console.log('error getting flickr photos');
+            }            
+        });
+
+    self.queryFlickrPhotoInfo = function (photo) {
+        var flickrUrl = 'https://api.flickr.com/services/rest';
+        var params = { 
+            'api_key':'0fb57b23161e29d12733e2d491969b93',
+            'photo_id': photo.id,
+            'method':'flickr.photos.getInfo',
+            'format':'json',
+            'nojsoncallback':'1'
+        };
+        $.get( flickrUrl, params, function (data) {
+            console.dir(data);
+            console.log(data.photo.owner['path_alias']);
+            console.log(data.photo.license);
+            photo.ownerName(data.photo.owner['path_alias']);
+            photo.licenseName(licenses[data.photo.license].name);
+            photo.licenseUrl(licenses[data.photo.license].url);
+            photo.licenseImageUrl("http://i.creativecommons.org/l/" + licenses[data.photo.license].code + "/2.0/80x15.png");
+        });
+    };
+
+    }
 
     // Client-side routes
     var initSammy = function() {
@@ -52,33 +163,8 @@ var ViewModel = function() {
         }       
     }
 
-    function getUrlFromPhoto (photo) {
-        return 'https://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '_n.jpg';
-    }
-
     self.activateRandomSite = function () {
         location.hash = Math.floor((Math.random() * self.unescoSites().length) + 1);
-    }
-
-    self.queryFlickr = function () {
-        var flickrUrl = 'https://api.flickr.com/services/rest';
-        var params = { 
-            'api_key':'0fb57b23161e29d12733e2d491969b93',
-            'text': self.activeSite().name,
-            'sort': 'interestingness-desc',
-            'license':'1,2,3,4,5,6,6,7,8',
-            'per_page':'8',
-            'method':'flickr.photos.search',
-            'format':'json',
-            'nojsoncallback':'1'
-        };
-        $.get( flickrUrl, params, function (data) {
-            if(data.stat === 'ok') {
-                self.photos(data.photos.photo.map(getUrlFromPhoto));
-            } else {
-                console.log('error getting flickr photos');
-            }            
-        });
     }
 }
 

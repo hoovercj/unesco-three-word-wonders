@@ -44,6 +44,14 @@ p {
   box-shadow: none;
 }
 
+.attribution img {
+	vertical-align: middle;
+}
+
+.attribution span {
+	vertical-align: middle;
+}
+
 td.icon {
     text-align: center;
 }
