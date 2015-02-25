@@ -11,7 +11,7 @@ function UnescoSite(site) {
     });
     self.mapURL = ko.computed(function () {
         return 'https://maps.googleapis.com/maps/api/staticmap?center=' + self.latitude + ',' + self.longitude + 
-            '&zoom=10&size=600x300&maptype=roadmap&markers=icon:' + 'http://www.codyhoover.com/unesco-three-word-wonders/img/what3words_pin_small.png|' +
+            '&zoom=7&size=600x300&maptype=roadmap&markers=icon:' + 'http://www.codyhoover.com/unesco-three-word-wonders/img/what3words_pin_small.png|' +
             + self.latitude + ',' + self.longitude;
     });
 }
