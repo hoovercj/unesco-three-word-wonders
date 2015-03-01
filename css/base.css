@@ -1,16 +1,27 @@
 html, body, div, h1, h2, h3, h4, h5, h6, ul, ol, dl, li, dt, dd, p, blockquote, pre, form, fieldset, table, th, td { margin: 0; padding: 0; }
-html, body {height: 100%;}
 img { border: none; }
 ul { list-style: none; }
 a { color: #009FDA; text-decoration: none; }
 
-
 body {
+	display: flex;
+	height: 100%;
+	flex-direction: column;
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #505050;
     line-height: 22px;
     background: none;
 }
+
+header,
+footer {
+  flex: none;
+}
+
+.main {
+	flex: 1 0  auto;
+}
+
 
 p {
     margin: 1em 0;
